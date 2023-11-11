@@ -67,12 +67,10 @@ const AssignTeamModal = ({
 		}
 	};
 
-	const teamOptions = teams
-  .filter((team) => team.player_count < 10)
-  .map((team) => ({
-    label: team.name,
-    value: team.id,
-  }));
+	const teamOptions = teams.map((team) => ({
+		label: team.name,
+		value: team.id,
+	}));
 
 	return (
 		<Modal

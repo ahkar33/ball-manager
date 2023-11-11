@@ -26,7 +26,7 @@ const Players = () => {
 		try {
 			setIsLoading(true);
 			const response = await axios.get<{ data: IPlayer[] }>(
-				`https://www.balldontlie.io/api/v1/players?page=${pageNum}`
+				`https://www.balldontlie.io/api/v1/players?page=${pageNum}&per_page=10`
 			);
 			const newData = response.data.data;
 			if (newData.length === 0) {
