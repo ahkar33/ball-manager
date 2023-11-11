@@ -52,8 +52,8 @@ const Teams = () => {
 		setSelectedTeam(null);
 	};
 
-	const isTeamNameExists = (teamName: string): boolean => {
-		return !!teams.find((team) => team.name === teamName);
+	const isTeamNameExists = (teamName: string) => {
+		return teams.find((team) => team.name === teamName);
 	};
 
 	const deleteTeam = (): void => {
@@ -63,6 +63,7 @@ const Teams = () => {
 			return !selectedTeam?.players.find((player) => player.id === user.id);
 		});
 		dispatch(setInTeamUsers(updatedInTeamUsers));
+		message.success("success");
 		closeDeleteModal();
 	};
 
@@ -74,6 +75,12 @@ const Teams = () => {
 	const closeDeleteModal = () => {
 		setSelectedTeam(null);
 		setIsDeleteModalOpen(false);
+	};
+
+	const handleClickEdit = (record: ITeam) => {
+		setIsOpen(true);
+		setIsEdit(true);
+		setSelectedTeam(record);
 	};
 
 	const columns: ColumnType<ITeam>[] = [
@@ -114,13 +121,20 @@ const Teams = () => {
 			key: "action",
 			align: "center" as AlignType,
 			render: (_, record: ITeam) => (
-				<div>
+				<div className="flex gap-3 justify-center">
 					<Button
 						type="primary"
 						className="bg-red-500 hover:!bg-red-400 hover:text-gray-100"
 						onClick={() => openDeleteModal(record)}
 					>
 						Delete
+					</Button>
+					<Button
+						type="primary"
+						className="bg-green-500 hover:!bg-green-400 hover:text-gray-100"
+						onClick={() => handleClickEdit(record)}
+					>
+						Edit
 					</Button>
 				</div>
 			),

@@ -23,9 +23,6 @@ const AssignTeamModal = ({
 	const teams = useSelector(
 		(state: { teams: TeamsState }) => state.teams.teams
 	);
-	const inTeamUsers = useSelector(
-		(state: { teams: TeamsState }) => state.teams.inTeamUsers
-	);
 	const [isLoading, setIsLoading] = useState(false);
 	const dispatch = useDispatch();
 
@@ -58,7 +55,7 @@ const AssignTeamModal = ({
 			};
 			dispatch(updateTeam(selectedTeam));
 			dispatch(addInTeamUser(item));
-			message.success("Sucessfully Assgined");
+			message.success("Success");
 			onCancel();
 		} catch (error) {
 			message.error("Assigning Team Failed");

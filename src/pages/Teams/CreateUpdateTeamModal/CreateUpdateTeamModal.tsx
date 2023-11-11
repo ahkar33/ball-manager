@@ -3,14 +3,14 @@ import { ITeam } from "@/interfaces";
 import { Button, Form, Input, Modal, Space, message } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
-import { addTeam } from "@/store/team/teamSlice";
+import { addTeam, updateTeam } from "@/store/team/teamSlice";
 
 type CreateUpdateTeamModalProps = {
 	open: boolean;
 	onCancel: () => void;
 	item: ITeam | null;
 	isEdit: boolean;
-	isTeamNameExists: (teamName: string) => boolean;
+	isTeamNameExists: (teamName: string) => ITeam | undefined;
 };
 
 const CreateUpdateTeamModal = ({
@@ -26,19 +26,38 @@ const CreateUpdateTeamModal = ({
 	const onFinish = ({ name, region, country }: ITeam) => {
 		try {
 			setIsLoading(true);
-			if (isTeamNameExists(name)) {
-				message.error("Name already exists");
-				return;
+			console.log(isEdit);
+			if (!isEdit) {
+				if (isTeamNameExists(name)) {
+					message.error("Name already exists");
+					return;
+				}
+				const reqData: ITeam = {
+					id: uuidv4(),
+					name,
+					region,
+					country,
+					player_count: 0,
+					players: [],
+				};
+				dispatch(addTeam(reqData));
+			} else {
+				if (!item) return;
+				const searchTeam = isTeamNameExists(name);
+				console.log("hello", searchTeam?.id);
+				console.log(item.id);
+				if (!searchTeam) {
+					item = { ...item, name, region, country };
+					dispatch(updateTeam(item));
+				} else if (searchTeam && searchTeam.id === item.id) {
+					item = { ...item, name, region, country };
+					dispatch(updateTeam(item));
+				} else {
+					message.error("Name already exists");
+					return;
+				}
 			}
-			const reqData: ITeam = {
-				id: uuidv4(),
-				name,
-				region,
-				country,
-				player_count: 0,
-				players: [],
-			};
-			dispatch(addTeam(reqData));
+			message.success("success");
 			onCancel();
 		} catch (error) {
 			message.error("Creating Team Failed");
@@ -61,11 +80,9 @@ const CreateUpdateTeamModal = ({
 			<Form
 				layout="vertical"
 				requiredMark={false}
-				initialValues={
-					{
-						// ...item,
-					}
-				}
+				initialValues={{
+					...item,
+				}}
 				onFinish={onFinish}
 			>
 				<Form.Item
