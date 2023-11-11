@@ -1,3 +1,4 @@
 import ITeam from "./ITeam";
+import IPlayer from "./IPlayer";
 
-export type { ITeam };
+export type { ITeam, IPlayer };
