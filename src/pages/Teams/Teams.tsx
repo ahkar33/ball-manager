@@ -55,7 +55,10 @@ const Teams = () => {
 	};
 
 	const isTeamNameExists = (teamName: string) => {
-		return teams.find((team) => team.name === teamName);
+		return teams.find(
+			(team) =>
+				team.name.trim().toLowerCase() === teamName.trim().trim().toLowerCase()
+		);
 	};
 
 	const deleteTeam = (): void => {
@@ -95,8 +98,7 @@ const Teams = () => {
 		setSelectedTeam(null);
 	};
 
-	useEffect(() => {
-	}, [selectedTeam])
+	useEffect(() => {}, [selectedTeam]);
 
 	const columns: ColumnType<ITeam>[] = [
 		{
