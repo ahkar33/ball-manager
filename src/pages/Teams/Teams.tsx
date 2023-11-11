@@ -13,6 +13,7 @@ const Teams = () => {
 	const teams = useSelector(
 		(state: { teams: TeamsState }) => state.teams.teams
 	);
+
 	const dispatch = useDispatch();
 	const [isOpen, setIsOpen] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);

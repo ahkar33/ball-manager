@@ -1,4 +1,4 @@
-import { Dispatch, useState } from "react";
+import { useState } from "react";
 import { ITeam } from "@/interfaces";
 import { Button, Form, Input, Modal, Space, message } from "antd";
 import { v4 as uuidv4 } from "uuid";
@@ -36,8 +36,9 @@ const CreateUpdateTeamModal = ({
 				region,
 				country,
 				player_count: 0,
+				players: [],
 			};
-			dispatch(addTeam(reqData))
+			dispatch(addTeam(reqData));
 			onCancel();
 		} catch (error) {
 			message.error("Creating Team Failed");
