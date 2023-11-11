@@ -33,8 +33,10 @@ const TeamDetailsModal = ({
 					{team && team?.players.length > 0 ? (
 						<>
 							{team?.players.map((palyer, index) => (
-								<div key={palyer.id} className="flex gap-2 w-36 mx-auto">
-									<p>{index + 1}.</p>
+								<div key={palyer.id} className="flex w-44 ml-16">
+									<div style={{minWidth: 30}}>
+										<p>{index + 1}.</p>
+									</div>
 									<p>
 										{palyer.first_name} {palyer.last_name}
 									</p>
