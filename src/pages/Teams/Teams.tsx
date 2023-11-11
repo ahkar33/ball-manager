@@ -59,6 +59,10 @@ const Teams = () => {
 	const deleteTeam = (): void => {
 		const newTeams = teams.filter((team) => team.id !== selectedTeam?.id);
 		dispatch(setTeams(newTeams));
+		const updatedInTeamUsers = inTeamUsers.filter((user) => {
+			return !selectedTeam?.players.find((player) => player.id === user.id);
+		});
+		dispatch(setInTeamUsers(updatedInTeamUsers));
 		closeDeleteModal();
 	};
 

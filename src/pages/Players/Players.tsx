@@ -5,11 +5,14 @@ import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AssignTeamModal from "./AssignTeamModal/AssignTeamModal";
 import { useDispatch, useSelector } from "react-redux";
-import { TeamsState, setInTeamUsers } from "@/store/team/teamSlice";
+import { TeamsState, setInTeamUsers, setTeams } from "@/store/team/teamSlice";
 
 const Players = () => {
 	const inTeamUsers = useSelector(
 		(state: { teams: TeamsState }) => state.teams.inTeamUsers
+	);
+	const teams = useSelector(
+		(state: { teams: TeamsState }) => state.teams.teams
 	);
 	const [players, setPlayers] = useState<IPlayer[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
@@ -39,13 +42,17 @@ const Players = () => {
 
 	useEffect(() => {
 		try {
+			const storeTeams = localStorage.getItem("teams");
+			if (storeTeams) {
+				dispatch(setTeams(JSON.parse(storeTeams)));
+			}
 			const storeInTeamUsers = localStorage.getItem("inTeamUsers");
 			if (storeInTeamUsers !== null) {
 				dispatch(setInTeamUsers(JSON.parse(storeInTeamUsers)));
 			}
 		} catch (error) {
 			message.error("Something went wrong");
-		} 
+		}
 	}, []);
 
 	useEffect(() => {
@@ -79,22 +86,27 @@ const Players = () => {
 				hasMore={hasMore}
 				loader={null}
 			>
-				{players.map((player, index) => (
-					<div
-						key={player.id + player.first_name + index}
-						className="flex gap-3"
-					>
-						<p>
-							{index + 1} {player.first_name}
-						</p>
-						<button
-							onClick={() => handleClick(player)}
-							disabled={isPlayerExistsInTeam(player)}
+				{players.map((player, index) => {
+					const team = teams.find((team) =>
+						team.players.find((_player) => _player.id === player.id)
+					);
+					return (
+						<div
+							key={player.id + player.first_name + index}
+							className="flex gap-3"
 						>
-							Add
-						</button>
-					</div>
-				))}
+							<p>
+								{index + 1} {player.first_name} {team?.name && `(${team.name})`}
+							</p>
+							<button
+								onClick={() => handleClick(player)}
+								disabled={isPlayerExistsInTeam(player)}
+							>
+								Assign
+							</button>
+						</div>
+					);
+				})}
 			</InfiniteScroll>
 
 			{hasMore && (

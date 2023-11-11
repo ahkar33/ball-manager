@@ -34,6 +34,10 @@ export const teamSlice = createSlice({
 		},
 		setInTeamUsers: (state, action: PayloadAction<IPlayer[]>) => {
 			state.inTeamUsers = action.payload;
+			localStorage.setItem(
+				"inTeamUsers",
+				JSON.stringify([...state.inTeamUsers])
+			);
 		},
 		addInTeamUser: (state, action: PayloadAction<IPlayer>) => {
 			state.inTeamUsers.push(action.payload);
