@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
 	TeamsState,
 	addInTeamUser,
-	addTeam,
 	setTeams,
 	updateTeam,
 } from "@/store/team/teamSlice";

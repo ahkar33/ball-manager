@@ -6,12 +6,15 @@ import { Button, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { ITeam } from "@/interfaces";
 import { ConfirmModal } from "@/components";
-import { TeamsState, setTeams } from "@/store/team/teamSlice";
+import { TeamsState, setInTeamUsers, setTeams } from "@/store/team/teamSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Teams = () => {
 	const teams = useSelector(
 		(state: { teams: TeamsState }) => state.teams.teams
+	);
+	const inTeamUsers = useSelector(
+		(state: { teams: TeamsState }) => state.teams.inTeamUsers
 	);
 
 	const dispatch = useDispatch();
@@ -25,8 +28,12 @@ const Teams = () => {
 		try {
 			setIsLoading(true);
 			const storeTeams = localStorage.getItem("teams");
-			if (storeTeams !== null) {
+			if (storeTeams) {
 				dispatch(setTeams(JSON.parse(storeTeams)));
+			}
+			const storeInTeamUsers = localStorage.getItem("inTeamUsers");
+			if (storeInTeamUsers) {
+				dispatch(setInTeamUsers(JSON.parse(storeInTeamUsers)));
 			}
 		} catch (error) {
 			message.error("Something went wrong when getting teams data");
