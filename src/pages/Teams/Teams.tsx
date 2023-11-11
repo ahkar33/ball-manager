@@ -13,8 +13,8 @@ const Teams = () => {
 	const teams = useSelector(
 		(state: { teams: TeamsState }) => state.teams.teams
 	);
-	const inTeamUsers = useSelector(
-		(state: { teams: TeamsState }) => state.teams.inTeamUsers
+	const inTeamPlayers = useSelector(
+		(state: { teams: TeamsState }) => state.teams.inTeamPlayers
 	);
 
 	const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const Teams = () => {
 			if (storeTeams) {
 				dispatch(setTeams(JSON.parse(storeTeams)));
 			}
-			const storeInTeamUsers = localStorage.getItem("inTeamUsers");
+			const storeInTeamUsers = localStorage.getItem("inTeamPlayers");
 			if (storeInTeamUsers) {
 				dispatch(setInTeamUsers(JSON.parse(storeInTeamUsers)));
 			}
@@ -59,10 +59,10 @@ const Teams = () => {
 	const deleteTeam = (): void => {
 		const newTeams = teams.filter((team) => team.id !== selectedTeam?.id);
 		dispatch(setTeams(newTeams));
-		const updatedInTeamUsers = inTeamUsers.filter((user) => {
+		const updatedInTeamPlayers = inTeamPlayers.filter((user) => {
 			return !selectedTeam?.players.find((player) => player.id === user.id);
 		});
-		dispatch(setInTeamUsers(updatedInTeamUsers));
+		dispatch(setInTeamUsers(updatedInTeamPlayers));
 		message.success("success");
 		closeDeleteModal();
 	};
@@ -169,6 +169,7 @@ const Teams = () => {
 				onCancel={closeCreateUpdateModal}
 				isEdit={isEdit}
 				isTeamNameExists={isTeamNameExists}
+				inTeamPlayers={inTeamPlayers}
 			/>
 			<ConfirmModal
 				open={isDeleteModalOpen}

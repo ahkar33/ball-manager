@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { ITeam } from "@/interfaces";
+import { useEffect, useState } from "react";
+import { IPlayer, ITeam } from "@/interfaces";
 import { Button, Form, Input, Modal, Space, message } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
-import { addTeam, updateTeam } from "@/store/team/teamSlice";
+import { addTeam, setInTeamUsers, updateTeam } from "@/store/team/teamSlice";
 
 type CreateUpdateTeamModalProps = {
 	open: boolean;
@@ -11,17 +11,28 @@ type CreateUpdateTeamModalProps = {
 	item: ITeam | null;
 	isEdit: boolean;
 	isTeamNameExists: (teamName: string) => ITeam | undefined;
+	inTeamPlayers: IPlayer[];
 };
 
 const CreateUpdateTeamModal = ({
 	open,
 	onCancel,
-	item,
+	item: selectedItem,
 	isEdit,
 	isTeamNameExists,
+	inTeamPlayers,
 }: CreateUpdateTeamModalProps) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const dispatch = useDispatch();
+	const [playerList, setPlayerList] = useState<IPlayer[]>([]);
+	const [item, setItem] = useState<ITeam | null>(null);
+
+	useEffect(() => {
+		if (selectedItem) {
+			setPlayerList(selectedItem?.players);
+			setItem(selectedItem);
+		}
+	}, [selectedItem]);
 
 	const onFinish = ({ name, region, country }: ITeam) => {
 		try {
@@ -44,26 +55,45 @@ const CreateUpdateTeamModal = ({
 			} else {
 				if (!item) return;
 				const searchTeam = isTeamNameExists(name);
-				console.log("hello", searchTeam?.id);
-				console.log(item.id);
 				if (!searchTeam) {
-					item = { ...item, name, region, country };
-					dispatch(updateTeam(item));
+					const reqData = { ...item, name, region, country };
+					dispatch(updateTeam(reqData));
 				} else if (searchTeam && searchTeam.id === item.id) {
-					item = { ...item, name, region, country };
-					dispatch(updateTeam(item));
+					const reqData = { ...item, name, region, country };
+					dispatch(updateTeam(reqData));
 				} else {
 					message.error("Name already exists");
 					return;
 				}
 			}
 			message.success("success");
+			setPlayerList([]);
 			onCancel();
 		} catch (error) {
 			message.error("Creating Team Failed");
 		} finally {
 			setIsLoading(false);
 		}
+	};
+
+	const handleRemovePlayer = (player: IPlayer) => {
+		if (!item) return;
+		const updatedPlayers = playerList.filter(
+			(_player) => _player.id !== player.id
+		);
+		const reqData = {
+			...item,
+			players: updatedPlayers,
+			player_count: updatedPlayers.length,
+		};
+		setItem(reqData);
+		setPlayerList(updatedPlayers);
+		const updatedInTeamPlayers = inTeamPlayers.filter(
+			(user) => user.id !== player.id
+		);
+		dispatch(updateTeam(reqData));
+		dispatch(setInTeamUsers(updatedInTeamPlayers));
+		message.success("Success");
 	};
 
 	return (
@@ -123,6 +153,23 @@ const CreateUpdateTeamModal = ({
 				>
 					<Input size="large" type="text" />
 				</Form.Item>
+
+				<div>
+					<h3>Player List</h3>
+					{playerList.map((player) => {
+						return (
+							<div key={player.id}>
+								<p>{player.first_name}</p>
+								<button
+									type="button"
+									onClick={() => handleRemovePlayer(player)}
+								>
+									remove
+								</button>
+							</div>
+						);
+					})}
+				</div>
 
 				<Form.Item className="mt-10">
 					<Space size={"middle"}>

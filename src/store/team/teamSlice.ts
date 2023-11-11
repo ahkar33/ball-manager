@@ -3,12 +3,12 @@ import { PayloadAction, createSlice, isAction } from "@reduxjs/toolkit";
 
 export type TeamsState = {
 	teams: ITeam[];
-	inTeamUsers: IPlayer[];
+	inTeamPlayers: IPlayer[];
 };
 
 const initialState: TeamsState = {
 	teams: [],
-	inTeamUsers: [],
+	inTeamPlayers: [],
 };
 
 export const teamSlice = createSlice({
@@ -33,17 +33,17 @@ export const teamSlice = createSlice({
 			localStorage.setItem("teams", JSON.stringify([...state.teams]));
 		},
 		setInTeamUsers: (state, action: PayloadAction<IPlayer[]>) => {
-			state.inTeamUsers = action.payload;
+			state.inTeamPlayers = action.payload;
 			localStorage.setItem(
-				"inTeamUsers",
-				JSON.stringify([...state.inTeamUsers])
+				"inTeamPlayers",
+				JSON.stringify([...state.inTeamPlayers])
 			);
 		},
 		addInTeamUser: (state, action: PayloadAction<IPlayer>) => {
-			state.inTeamUsers.push(action.payload);
+			state.inTeamPlayers.push(action.payload);
 			localStorage.setItem(
-				"inTeamUsers",
-				JSON.stringify([...state.inTeamUsers])
+				"inTeamPlayers",
+				JSON.stringify([...state.inTeamPlayers])
 			);
 		},
 	},

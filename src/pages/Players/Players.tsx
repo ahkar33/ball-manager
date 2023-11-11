@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { TeamsState, setInTeamUsers, setTeams } from "@/store/team/teamSlice";
 
 const Players = () => {
-	const inTeamUsers = useSelector(
-		(state: { teams: TeamsState }) => state.teams.inTeamUsers
+	const inTeamPlayers = useSelector(
+		(state: { teams: TeamsState }) => state.teams.inTeamPlayers
 	);
 	const teams = useSelector(
 		(state: { teams: TeamsState }) => state.teams.teams
@@ -46,7 +46,7 @@ const Players = () => {
 			if (storeTeams) {
 				dispatch(setTeams(JSON.parse(storeTeams)));
 			}
-			const storeInTeamUsers = localStorage.getItem("inTeamUsers");
+			const storeInTeamUsers = localStorage.getItem("inTeamPlayers");
 			if (storeInTeamUsers !== null) {
 				dispatch(setInTeamUsers(JSON.parse(storeInTeamUsers)));
 			}
@@ -74,7 +74,7 @@ const Players = () => {
 	};
 
 	const isPlayerExistsInTeam = (player: IPlayer): boolean => {
-		const foundPlayer = inTeamUsers.find((user) => user.id === player.id);
+		const foundPlayer = inTeamPlayers.find((user) => user.id === player.id);
 		return !!foundPlayer;
 	};
 
