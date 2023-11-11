@@ -11,6 +11,7 @@ const Page404: React.FC = () => {
 
 	return (
 		<Result
+			className="mt-10"
 			status="404"
 			title="404"
 			subTitle="PAGE NOT FOUND"

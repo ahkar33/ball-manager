@@ -43,7 +43,6 @@ const CreateUpdateTeamModal = ({
 	const onFinish = ({ name, region, country }: ITeam) => {
 		try {
 			setIsLoading(true);
-			console.log(isEdit);
 			if (!isEdit) {
 				if (isTeamNameExists(name)) {
 					message.error("Name already exists");
