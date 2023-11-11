@@ -38,6 +38,7 @@ const CreateUpdateTeamModal = ({
 			setPlayerList(selectedItem?.players);
 			setItem(selectedItem);
 		}
+		return () => setItem(null);
 	}, [selectedItem]);
 
 	const onFinish = ({ name, region, country }: ITeam) => {

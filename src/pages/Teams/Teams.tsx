@@ -91,9 +91,13 @@ const Teams = () => {
 	};
 
 	const closeDetailsModal = () => {
-		setSelectedTeam(null);
 		setIsDetailsOpen(false);
+		setSelectedTeam(null);
 	};
+
+	useEffect(() => {
+		console.log(selectedTeam);
+	}, [selectedTeam])
 
 	const columns: ColumnType<ITeam>[] = [
 		{
