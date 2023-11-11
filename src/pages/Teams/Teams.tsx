@@ -8,6 +8,7 @@ import { ITeam } from "@/interfaces";
 import { ConfirmModal } from "@/components";
 import { TeamsState, setInTeamUsers, setTeams } from "@/store/team/teamSlice";
 import { useDispatch, useSelector } from "react-redux";
+import TeamDetailsModal from "./TeamDetailsModal/TeamDetailsModal";
 
 const Teams = () => {
 	const teams = useSelector(
@@ -23,6 +24,7 @@ const Teams = () => {
 	const [selectedTeam, setSelectedTeam] = useState<ITeam | null>(null);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
 	useEffect(() => {
 		try {
@@ -83,6 +85,16 @@ const Teams = () => {
 		setSelectedTeam(record);
 	};
 
+	const handleClickDetails = (record: ITeam) => {
+		setIsDetailsOpen(true);
+		setSelectedTeam(record);
+	};
+
+	const closeDetailsModal = () => {
+		setSelectedTeam(null);
+		setIsDetailsOpen(false);
+	};
+
 	const columns: ColumnType<ITeam>[] = [
 		{
 			title: "No.",
@@ -136,6 +148,13 @@ const Teams = () => {
 					>
 						Edit
 					</Button>
+					<Button
+						type="primary"
+						className="bg-yellow-500 hover:!bg-yellow-400 hover:text-gray-100"
+						onClick={() => handleClickDetails(record)}
+					>
+						Details
+					</Button>
 				</div>
 			),
 		},
@@ -176,6 +195,11 @@ const Teams = () => {
 				onClose={closeDeleteModal}
 				onOk={deleteTeam}
 				confirmMessage={"Are you sure you want to delete?"}
+			/>
+			<TeamDetailsModal
+				open={isDetailsOpen}
+				handleCancel={closeDetailsModal}
+				team={selectedTeam}
 			/>
 		</div>
 	);

@@ -27,7 +27,7 @@ const CreateUpdateTeamModal = ({
 	const [playerList, setPlayerList] = useState<IPlayer[]>([]);
 	const [item, setItem] = useState<ITeam | null>(null);
 
-	const handleCanel = () => {
+	const handleCancel = () => {
 		onCancel();
 		setPlayerList([]);
 		setItem(null);
@@ -72,7 +72,7 @@ const CreateUpdateTeamModal = ({
 				}
 			}
 			message.success("success");
-			handleCanel();
+			handleCancel();
 		} catch (error) {
 			message.error("Creating Team Failed");
 		} finally {
@@ -108,7 +108,7 @@ const CreateUpdateTeamModal = ({
 			closable={false}
 			footer={false}
 			title={isEdit ? "Update Team" : "Create New Team"}
-			onCancel={handleCanel}
+			onCancel={handleCancel}
 			maskClosable={false}
 		>
 			<Form
@@ -181,7 +181,7 @@ const CreateUpdateTeamModal = ({
 
 				<Form.Item className="mt-10">
 					<Space size={"middle"}>
-						<Button type="default" onClick={handleCanel}>
+						<Button type="default" onClick={handleCancel}>
 							Cancel
 						</Button>
 						<Button type="primary" htmlType="submit" loading={isLoading}>
