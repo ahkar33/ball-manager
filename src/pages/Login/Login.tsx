@@ -1,5 +1,5 @@
 import { AuthType, saveUserInfo } from "@/store/auth/authSlice";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {  Navigate, useNavigate } from "react-router-dom";
 
@@ -17,6 +17,7 @@ const Login = () => {
 	const onFinish = (values: { username: string }) => {
 		dispatch(saveUserInfo({ username: values.username }));
 		navigate("/teams");
+		message.success("Successfully Login");
 	};
 
 	return (

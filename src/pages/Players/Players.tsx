@@ -105,7 +105,7 @@ const Players = () => {
 							<div className="flex items-center">
 								<p className="font-bold mr-4">{index + 1}.</p>
 								<div className="flex flex-col gap-2">
-									<p>Name - {player.first_name}</p>
+									<p>Name - {player.first_name} {player.last_name}</p>
 									<p>
 										Team -{" "}
 										{team ? (

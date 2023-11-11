@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { IPlayer, ITeam } from "@/interfaces";
-import { Button, Form, Input, Modal, Space, message } from "antd";
+import { Button, Card, Form, Input, Modal, Space, message } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
 import { addTeam, setInTeamUsers, updateTeam } from "@/store/team/teamSlice";
@@ -60,10 +60,7 @@ const CreateUpdateTeamModal = ({
 			} else {
 				if (!item) return;
 				const searchTeam = isTeamNameExists(name);
-				if (!searchTeam) {
-					const reqData = { ...item, name, region, country };
-					dispatch(updateTeam(reqData));
-				} else if (searchTeam && searchTeam.id === item.id) {
+				if (!searchTeam || (searchTeam && searchTeam.id === item.id)) {
 					const reqData = { ...item, name, region, country };
 					dispatch(updateTeam(reqData));
 				} else {
@@ -159,24 +156,28 @@ const CreateUpdateTeamModal = ({
 				</Form.Item>
 
 				{playerList.length > 0 && (
-					<div className="mt-4">
-						<h3 className="text-lg font-semibold mb-2">Player List</h3>
-						{playerList.map((player, index) => (
-							<div
-								key={player.id}
-								className="flex items-center justify-between mb-2"
-							>
-								<p className="mr-2">{index + 1}. {player.first_name}</p>
-								<Button
-									type="primary"
-									onClick={() => handleRemovePlayer(player)}
-									className="bg-red-500 hover:!bg-red-400 hover:text-gray-100"
+					<Card bordered={true} className="border-2">
+						<div className="m-1">
+							<h3 className="text-lg font-semibold mb-2">Player List</h3>
+							{playerList.map((player, index) => (
+								<div
+									key={player.id}
+									className="flex items-center justify-between mb-2"
 								>
-									Remove
-								</Button>
-							</div>
-						))}
-					</div>
+									<p className="mr-2">
+										{index + 1}. {player.first_name} {player.last_name}
+									</p>
+									<Button
+										type="primary"
+										onClick={() => handleRemovePlayer(player)}
+										className="bg-red-500 hover:!bg-red-400 hover:text-gray-100"
+									>
+										Remove
+									</Button>
+								</div>
+							))}
+						</div>
+					</Card>
 				)}
 
 				<Form.Item className="mt-10">

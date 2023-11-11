@@ -1,5 +1,5 @@
 import { AuthType, clearUserInfo } from "@/store/auth/authSlice";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -25,6 +25,7 @@ const Navbar = () => {
 
   const logout = () => {
     dispatch(clearUserInfo());
+    	message.success("Successfully Logout");
   };
 
   return (
