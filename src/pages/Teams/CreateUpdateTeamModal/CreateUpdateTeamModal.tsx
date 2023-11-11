@@ -27,6 +27,12 @@ const CreateUpdateTeamModal = ({
 	const [playerList, setPlayerList] = useState<IPlayer[]>([]);
 	const [item, setItem] = useState<ITeam | null>(null);
 
+	const handleCanel = () => {
+		onCancel();
+		setPlayerList([]);
+		setItem(null);
+	};
+
 	useEffect(() => {
 		if (selectedItem) {
 			setPlayerList(selectedItem?.players);
@@ -67,8 +73,7 @@ const CreateUpdateTeamModal = ({
 				}
 			}
 			message.success("success");
-			setPlayerList([]);
-			onCancel();
+			handleCanel();
 		} catch (error) {
 			message.error("Creating Team Failed");
 		} finally {
@@ -104,7 +109,7 @@ const CreateUpdateTeamModal = ({
 			closable={false}
 			footer={false}
 			title={isEdit ? "Update Team" : "Create New Team"}
-			onCancel={onCancel}
+			onCancel={handleCanel}
 			maskClosable={false}
 		>
 			<Form
@@ -154,26 +159,30 @@ const CreateUpdateTeamModal = ({
 					<Input size="large" type="text" />
 				</Form.Item>
 
-				<div>
-					<h3>Player List</h3>
-					{playerList.map((player) => {
-						return (
-							<div key={player.id}>
-								<p>{player.first_name}</p>
-								<button
-									type="button"
+				{playerList.length > 0 && (
+					<div className="mt-4">
+						<h3 className="text-lg font-semibold mb-2">Player List</h3>
+						{playerList.map((player, index) => (
+							<div
+								key={player.id}
+								className="flex items-center justify-between mb-2"
+							>
+								<p className="mr-2">{index + 1}. {player.first_name}</p>
+								<Button
+									type="primary"
 									onClick={() => handleRemovePlayer(player)}
+									className="bg-red-500 hover:!bg-red-400 hover:text-gray-100"
 								>
-									remove
-								</button>
+									Remove
+								</Button>
 							</div>
-						);
-					})}
-				</div>
+						))}
+					</div>
+				)}
 
 				<Form.Item className="mt-10">
 					<Space size={"middle"}>
-						<Button type="default" onClick={onCancel}>
+						<Button type="default" onClick={handleCanel}>
 							Cancel
 						</Button>
 						<Button type="primary" htmlType="submit" loading={isLoading}>
