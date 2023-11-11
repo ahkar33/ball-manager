@@ -4,14 +4,20 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AssignTeamModal from "./AssignTeamModal/AssignTeamModal";
+import { useDispatch, useSelector } from "react-redux";
+import { TeamsState, setInTeamUsers } from "@/store/team/teamSlice";
 
 const Players = () => {
+	const inTeamUsers = useSelector(
+		(state: { teams: TeamsState }) => state.teams.inTeamUsers
+	);
 	const [players, setPlayers] = useState<IPlayer[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(true);
 	const [selectedPlayer, setSelectedPlayer] = useState<IPlayer | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
+	const dispatch = useDispatch();
 
 	const getPlayers = async (pageNum: number) => {
 		try {
@@ -32,6 +38,17 @@ const Players = () => {
 	};
 
 	useEffect(() => {
+		try {
+			const storeInTeamUsers = localStorage.getItem("inTeamUsers");
+			if (storeInTeamUsers !== null) {
+				dispatch(setInTeamUsers(JSON.parse(storeInTeamUsers)));
+			}
+		} catch (error) {
+			message.error("Something went wrong");
+		} 
+	}, []);
+
+	useEffect(() => {
 		getPlayers(page);
 	}, [page]);
 
@@ -47,6 +64,11 @@ const Players = () => {
 	const handleClick = (player: IPlayer) => {
 		setSelectedPlayer(player);
 		setIsOpen(true);
+	};
+
+	const isPlayerExistsInTeam = (player: IPlayer): boolean => {
+		const foundPlayer = inTeamUsers.find((user) => user.id === player.id);
+		return !!foundPlayer;
 	};
 
 	return (
@@ -65,7 +87,12 @@ const Players = () => {
 						<p>
 							{index + 1} {player.first_name}
 						</p>
-						<button onClick={() => handleClick(player)}>Add</button>
+						<button
+							onClick={() => handleClick(player)}
+							disabled={isPlayerExistsInTeam(player)}
+						>
+							Add
+						</button>
 					</div>
 				))}
 			</InfiniteScroll>

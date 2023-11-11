@@ -4,6 +4,7 @@ import { Button, Form, Modal, Select, Space, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	TeamsState,
+	addInTeamUser,
 	addTeam,
 	setTeams,
 	updateTeam,
@@ -23,6 +24,9 @@ const AssignTeamModal = ({
 	const teams = useSelector(
 		(state: { teams: TeamsState }) => state.teams.teams
 	);
+	const inTeamUsers = useSelector(
+		(state: { teams: TeamsState }) => state.teams.inTeamUsers
+	);
 	const [isLoading, setIsLoading] = useState(false);
 	const dispatch = useDispatch();
 
@@ -40,8 +44,6 @@ const AssignTeamModal = ({
 		}
 	}, []);
 
-	console.log(teams);
-
 	const onFinish = (data: { team: string }) => {
 		try {
 			setIsLoading(true);
@@ -56,6 +58,7 @@ const AssignTeamModal = ({
 				player_count: selectedTeam.players.length,
 			};
 			dispatch(updateTeam(selectedTeam));
+			dispatch(addInTeamUser(item));
 			message.success("Sucessfully Assgined");
 			onCancel();
 		} catch (error) {

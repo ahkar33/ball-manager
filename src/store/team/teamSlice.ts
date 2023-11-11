@@ -1,12 +1,14 @@
-import { ITeam } from "@/interfaces";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { IPlayer, ITeam } from "@/interfaces";
+import { PayloadAction, createSlice, isAction } from "@reduxjs/toolkit";
 
 export type TeamsState = {
 	teams: ITeam[];
+	inTeamUsers: IPlayer[];
 };
 
 const initialState: TeamsState = {
 	teams: [],
+	inTeamUsers: [],
 };
 
 export const teamSlice = createSlice({
@@ -30,9 +32,26 @@ export const teamSlice = createSlice({
 			}
 			localStorage.setItem("teams", JSON.stringify([...state.teams]));
 		},
+		setInTeamUsers: (state, action: PayloadAction<IPlayer[]>) => {
+			state.inTeamUsers = action.payload;
+		},
+		addInTeamUser: (state, action: PayloadAction<IPlayer>) => {
+			state.inTeamUsers.push(action.payload);
+			localStorage.setItem(
+				"inTeamUsers",
+				JSON.stringify([...state.inTeamUsers])
+			);
+		},
 	},
 });
 
-export const { setTeams, addTeam, deleteTeam, updateTeam } = teamSlice.actions;
+export const {
+	setTeams,
+	addTeam,
+	deleteTeam,
+	updateTeam,
+	addInTeamUser,
+	setInTeamUsers,
+} = teamSlice.actions;
 
 export default teamSlice.reducer;
