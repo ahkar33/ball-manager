@@ -67,6 +67,13 @@ const AssignTeamModal = ({
 		}
 	};
 
+	const teamOptions = teams
+  .filter((team) => team.player_count < 10)
+  .map((team) => ({
+    label: team.name,
+    value: team.id,
+  }));
+
 	return (
 		<Modal
 			centered
@@ -107,12 +114,7 @@ const AssignTeamModal = ({
 								input?.toLowerCase()
 							)
 						}
-						options={teams.map((team) => {
-							return {
-								label: team.name,
-								value: team.id,
-							};
-						})}
+						options={teamOptions}
 					/>
 				</Form.Item>
 
