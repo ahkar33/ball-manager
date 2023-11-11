@@ -28,7 +28,7 @@ const Teams = () => {
 				dispatch(setTeams(JSON.parse(storeTeams)));
 			}
 		} catch (error) {
-			message.error("Something went wrong when getting team data");
+			message.error("Something went wrong when getting teams data");
 		} finally {
 			setIsLoading(false);
 		}

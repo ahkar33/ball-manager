@@ -32,16 +32,16 @@ const Navbar = () => {
 			<div className="flex space-x-4">
 				<Link
 					to="/teams"
-					className={`text-white no-underline ${
-						selectedLink === "/teams" ? "text-blue-300" : ""
+					className={`no-underline ${
+						selectedLink === "/teams" ? "text-blue-300" : "text-white"
 					}`}
 				>
 					<TeamOutlined /> Teams
 				</Link>
 				<Link
 					to="/players"
-					className={`text-white no-underline ${
-						selectedLink === "/players" ? "text-blue-300" : ""
+					className={`no-underline ${
+						selectedLink === "/players" ? "text-blue-300" : "text-white"
 					}`}
 				>
 					<UsergroupAddOutlined /> Players
