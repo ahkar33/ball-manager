@@ -113,9 +113,9 @@ const Teams = () => {
 			align: "center" as AlignType,
 		},
 		{
-			title: "Play Count",
+			title: "Player Count",
 			dataIndex: "player_count",
-			key: "play_count",
+			key: "player_count",
 			align: "center" as AlignType,
 			width: 230,
 		},
