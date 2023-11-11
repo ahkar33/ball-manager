@@ -2,13 +2,14 @@ import { Dispatch, useState } from "react";
 import { ITeam } from "@/interfaces";
 import { Button, Form, Input, Modal, Space, message } from "antd";
 import { v4 as uuidv4 } from "uuid";
+import { useDispatch } from "react-redux";
+import { addTeam } from "@/store/team/teamSlice";
 
 type CreateUpdateTeamModalProps = {
 	open: boolean;
 	onCancel: () => void;
 	item: ITeam | null;
 	isEdit: boolean;
-	setTeams: Dispatch<React.SetStateAction<ITeam[]>>;
 	isTeamNameExists: (teamName: string) => boolean;
 };
 
@@ -17,10 +18,10 @@ const CreateUpdateTeamModal = ({
 	onCancel,
 	item,
 	isEdit,
-	setTeams,
 	isTeamNameExists,
 }: CreateUpdateTeamModalProps) => {
 	const [isLoading, setIsLoading] = useState(false);
+	const dispatch = useDispatch();
 
 	const onFinish = ({ name, region, country }: ITeam) => {
 		try {
@@ -36,7 +37,7 @@ const CreateUpdateTeamModal = ({
 				country,
 				player_count: 0,
 			};
-			setTeams((prev) => [reqData, ...prev]);
+			dispatch(addTeam(reqData))
 			onCancel();
 		} catch (error) {
 			message.error("Creating Team Failed");

@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "@/store/auth/authSlice";
+import teamReducer from "@/store/team/teamSlice";
 
 const preloadedState = {
 	auth: {
@@ -10,6 +11,7 @@ const preloadedState = {
 const store = configureStore({
 	reducer: {
 		auth: authReducer,
+		teams: teamReducer,
 	},
 	preloadedState,
 });

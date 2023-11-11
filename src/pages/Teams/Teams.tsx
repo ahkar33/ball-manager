@@ -6,9 +6,14 @@ import { Button, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { ITeam } from "@/interfaces";
 import { ConfirmModal } from "@/components";
+import { TeamsState, setTeams } from "@/store/team/teamSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Teams = () => {
-	const [teams, setTeams] = useState<ITeam[]>([]);
+	const teams = useSelector(
+		(state: { teams: TeamsState }) => state.teams.teams
+	);
+	const dispatch = useDispatch();
 	const [isOpen, setIsOpen] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
 	const [selectedTeam, setSelectedTeam] = useState<ITeam | null>(null);
@@ -20,7 +25,7 @@ const Teams = () => {
 			setIsLoading(true);
 			const storeTeams = localStorage.getItem("teams");
 			if (storeTeams !== null) {
-				setTeams(JSON.parse(storeTeams));
+				dispatch(setTeams(JSON.parse(storeTeams)));
 			}
 		} catch (error) {
 			message.error("Something went wrong when getting team data");
@@ -45,7 +50,7 @@ const Teams = () => {
 
 	const deleteTeam = (): void => {
 		const newTeams = teams.filter((team) => team.id !== selectedTeam?.id);
-		setTeams(newTeams);
+		dispatch(setTeams(newTeams));
 		closeDeleteModal();
 	};
 
@@ -137,7 +142,6 @@ const Teams = () => {
 				open={isOpen}
 				onCancel={closeCreateUpdateModal}
 				isEdit={isEdit}
-				setTeams={setTeams}
 				isTeamNameExists={isTeamNameExists}
 			/>
 			<ConfirmModal
