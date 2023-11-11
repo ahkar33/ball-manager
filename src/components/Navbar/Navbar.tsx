@@ -49,7 +49,7 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="flex items-center">
-        {username && <span className="text-white mr-2">{username}</span>}
+        {username && <h4 className="text-white mr-2">{username}</h4>}
         <Button
           type="primary"
           danger

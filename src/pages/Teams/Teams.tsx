@@ -96,7 +96,6 @@ const Teams = () => {
 	};
 
 	useEffect(() => {
-		console.log(selectedTeam);
 	}, [selectedTeam])
 
 	const columns: ColumnType<ITeam>[] = [
