@@ -13,6 +13,12 @@
 	padding: 20px !important;
 }
 
+.ant-modal-title,
 .ant-modal-footer {
 	text-align: center !important;
+}
+
+.ant-space {
+	width: 100%;
+	justify-content: center;
 }
