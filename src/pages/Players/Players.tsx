@@ -15,7 +15,6 @@ const Players = () => {
 		(state: { teams: TeamsState }) => state.teams.teams
 	);
 	const [players, setPlayers] = useState<IPlayer[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(true);
 	const [selectedPlayer, setSelectedPlayer] = useState<IPlayer | null>(null);
@@ -24,7 +23,6 @@ const Players = () => {
 
 	const getPlayers = async (pageNum: number) => {
 		try {
-			setIsLoading(true);
 			const response = await axios.get<{ data: IPlayer[] }>(
 				`https://www.balldontlie.io/api/v1/players?page=${pageNum}&per_page=10`
 			);
@@ -35,8 +33,6 @@ const Players = () => {
 			setPlayers((prevPlayers) => [...prevPlayers, ...newData]);
 		} catch (error) {
 			message.error("Something went wrong when getting players data");
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
