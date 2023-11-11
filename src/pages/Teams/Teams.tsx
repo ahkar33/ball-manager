@@ -138,7 +138,7 @@ const Teams = () => {
 	);
 
 	return (
-		<div className="items-center justify-center space-y-4 h-full p-12 w-full">
+		<div className="items-center justify-center space-y-4 h-full p-12 w-full mt-10">
 			{renderTop()}
 			<Table
 				dataSource={teams}

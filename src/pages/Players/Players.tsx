@@ -1,5 +1,5 @@
 import { IPlayer } from "@/interfaces";
-import { message } from "antd";
+import { message, Button } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -79,7 +79,7 @@ const Players = () => {
 	};
 
 	return (
-		<div className="items-center justify-center space-y-4 h-full p-12 w-full">
+		<div className="flex flex-col items-center justify-center space-y-4 h-full p-12 w-full mt-10">
 			<InfiniteScroll
 				dataLength={players.length}
 				next={() => {}}
@@ -93,17 +93,40 @@ const Players = () => {
 					return (
 						<div
 							key={player.id + player.first_name + index}
-							className="flex gap-3"
+							className="flex items-center justify-between bg-gray-100 p-4 rounded shadow-md  mb-4"
+							style={{
+								width: 420,
+							}}
 						>
-							<p>
-								{index + 1} {player.first_name} {team?.name && `(${team.name})`}
-							</p>
-							<button
+							<div className="flex items-center">
+								<p className="font-bold mr-4">{index + 1}.</p>
+								<div className="flex flex-col gap-2">
+									<p>Name - {player.first_name}</p>
+									<p>
+										Team -{" "}
+										{team ? (
+											<span className="text-blue-500">{team.name}</span>
+										) : (
+											<span className="text-red-500">Not Assigned Yet</span>
+										)}
+									</p>
+									<p>
+										Position -{" "}
+										{player.position ? (
+											<span className="text-green-500">{player.position}</span>
+										) : (
+											<span className="text-red-500">Not Assigned</span>
+										)}
+									</p>
+								</div>
+							</div>
+							<Button
+								type="primary"
 								onClick={() => handleClick(player)}
 								disabled={isPlayerExistsInTeam(player)}
 							>
 								Assign
-							</button>
+							</Button>
 						</div>
 					);
 				})}
@@ -111,13 +134,14 @@ const Players = () => {
 
 			{hasMore && (
 				<div className="text-center mt-4">
-					<button
-						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+					<Button
+						type="primary"
 						onClick={handleLoadMore}
+						loading={isLoading}
 						disabled={isLoading}
 					>
 						{isLoading ? "Loading..." : "Load More"}
-					</button>
+					</Button>
 				</div>
 			)}
 
