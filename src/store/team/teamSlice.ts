@@ -1,5 +1,5 @@
 import { IPlayer, ITeam } from "@/interfaces";
-import { PayloadAction, createSlice, isAction } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export type TeamsState = {
 	teams: ITeam[];

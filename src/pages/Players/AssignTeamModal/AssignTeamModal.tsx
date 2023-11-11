@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IPlayer, ITeam } from "@/interfaces";
+import { IPlayer } from "@/interfaces";
 import { Button, Form, Modal, Select, Space, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -80,16 +80,7 @@ const AssignTeamModal = ({
 			onCancel={onCancel}
 			maskClosable={false}
 		>
-			<Form
-				layout="vertical"
-				requiredMark={false}
-				initialValues={
-					{
-						// ...item,
-					}
-				}
-				onFinish={onFinish}
-			>
+			<Form layout="vertical" requiredMark={false} onFinish={onFinish}>
 				<Form.Item
 					name="team"
 					label="Team"
