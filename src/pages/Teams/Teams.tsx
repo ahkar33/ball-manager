@@ -2,20 +2,30 @@ import { AlignType } from "rc-table/lib/interface";
 import Table, { ColumnType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import CreateUpdateTeamModal from "./CreateUpdateTeamModal/CreateUpdateTeamModal";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { ITeam } from "@/interfaces";
+import { ConfirmModal } from "@/components";
 
 const Teams = () => {
 	const [teams, setTeams] = useState<ITeam[]>([]);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
 	const [selectedTeam, setSelectedTeam] = useState<ITeam | null>(null);
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		const storeTeams = localStorage.getItem("teams");
-		if (storeTeams !== null) {
-			setTeams(JSON.parse(storeTeams));
+		try {
+			setIsLoading(true);
+			const storeTeams = localStorage.getItem("teams");
+			if (storeTeams !== null) {
+				setTeams(JSON.parse(storeTeams));
+			}
+		} catch (error) {
+			message.error("Something went wrong when getting team data");
+		} finally {
+			setIsLoading(false);
 		}
 	}, []);
 
@@ -33,11 +43,28 @@ const Teams = () => {
 		return !!teams.find((team) => team.name === teamName);
 	};
 
+	const deleteTeam = (): void => {
+		const newTeams = teams.filter((team) => team.id !== selectedTeam?.id);
+		setTeams(newTeams);
+		closeDeleteModal();
+	};
+
+	const openDeleteModal = (record: ITeam) => {
+		setSelectedTeam(record);
+		setIsDeleteModalOpen(true);
+	};
+
+	const closeDeleteModal = () => {
+		setSelectedTeam(null);
+		setIsDeleteModalOpen(false);
+	};
+
 	const columns: ColumnType<ITeam>[] = [
 		{
 			title: "No.",
 			key: "no",
 			align: "center" as AlignType,
+			width: 100,
 			render: (_, __, index: number) => <>{index + 1}</>,
 		},
 		{
@@ -51,6 +78,7 @@ const Teams = () => {
 			dataIndex: "player_count",
 			key: "play_count",
 			align: "center" as AlignType,
+			width: 230,
 		},
 		{
 			title: "Region",
@@ -64,21 +92,22 @@ const Teams = () => {
 			key: "country",
 			align: "center" as AlignType,
 		},
-		// {
-		// 	title: "Action",
-		// 	key: "action",
-		// 	align: "center" as AlignType,
-		// 	render: (_, record: IContactUserRes) => (
-		// 		<Actions>
-		// 			<DetailsButton onClick={() => openDetailsModal(record)}>
-		// 				Details
-		// 			</DetailsButton>
-		// 			<DeleteButton onClick={() => openConfirmModal(record)}>
-		// 				Delete
-		// 			</DeleteButton>
-		// 		</Actions>
-		// 	),
-		// },
+		{
+			title: "Action",
+			key: "action",
+			align: "center" as AlignType,
+			render: (_, record: ITeam) => (
+				<div>
+					<Button
+						type="primary"
+						className="bg-red-500 hover:!bg-red-400 hover:text-gray-100"
+						onClick={() => openDeleteModal(record)}
+					>
+						Delete
+					</Button>
+				</div>
+			),
+		},
 	];
 
 	const renderTop = () => (
@@ -97,7 +126,7 @@ const Teams = () => {
 			<Table
 				dataSource={teams}
 				columns={columns}
-				// loading={isLoading}
+				loading={isLoading}
 				bordered
 				size="small"
 				pagination={false}
@@ -110,6 +139,12 @@ const Teams = () => {
 				isEdit={isEdit}
 				setTeams={setTeams}
 				isTeamNameExists={isTeamNameExists}
+			/>
+			<ConfirmModal
+				open={isDeleteModalOpen}
+				onClose={closeDeleteModal}
+				onOk={deleteTeam}
+				confirmMessage={"Are you sure you want to delete?"}
 			/>
 		</div>
 	);
