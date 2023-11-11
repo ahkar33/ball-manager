@@ -1,5 +1,5 @@
 import { IPlayer } from "@/interfaces";
-import { message, Button } from "antd";
+import { message, Button, Spin } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -82,9 +82,13 @@ const Players = () => {
 		<div className="flex flex-col items-center justify-center space-y-4 h-full p-12 w-full mt-10">
 			<InfiniteScroll
 				dataLength={players.length}
-				next={() => {}}
+				next={handleLoadMore}
 				hasMore={hasMore}
-				loader={null}
+				loader={
+					<div className="flex items-center justify-center h-full overflow-hidden">
+						<Spin />
+					</div>
+				}
 			>
 				{players.map((player, index) => {
 					const team = teams.find((team) =>
@@ -131,20 +135,6 @@ const Players = () => {
 					);
 				})}
 			</InfiniteScroll>
-
-			{hasMore && (
-				<div className="text-center mt-4">
-					<Button
-						type="primary"
-						onClick={handleLoadMore}
-						loading={isLoading}
-						disabled={isLoading}
-					>
-						{isLoading ? "Loading..." : "Load More"}
-					</Button>
-				</div>
-			)}
-
 			<AssignTeamModal
 				open={isOpen}
 				onCancel={handleClose}
